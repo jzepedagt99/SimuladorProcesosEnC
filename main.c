@@ -5,25 +5,26 @@
 
 
 typedef struct Proceso {
-    int pid;
-    int ppid;
-    char nombre[50];
-    int registros;
-    int tamano;
-    int hilos;
-    int quantum;
-    int iteraciones;
+    int pid;                  // Identificador único del proceso
+    int ppid;                 // Identificador del proceso padre.
+    char nombre[50];          // Nombre del proceso.
+    int registros;            // (No utilizado en la simulación) Simularía el estado de los registros.
+    int tamano;               // (No utilizado en la simulación) Simularía el tamaño en memoria.
+    int hilos;                // (No utilizado en la simulación) Hilos que utiliza el proceso.
+    int quantum;              // Cantidad de pulsos de CPU asignados por turno.
+    int iteraciones;          // Número total de ráfagas de CPU (quantums) que necesita para terminar.
 
-    int quantumRestante;
-    int iteracionesRestantes;
-    bool terminado;
 
-    struct Proceso *sig;
+    int quantumRestante;      // Pulsos restantes en el turno actual de CPU.
+    int iteracionesRestantes; // Ráfagas de CPU restantes para terminar.
+    bool terminado;           // Bandera que indica si el proceso ha finalizado
+    
+    struct Proceso *sig;      // Puntero al siguiente proceso en la cola.
 } Proceso;
 
 typedef struct CPU {
-    int id;
-    Proceso *actual;
+    int id;                   // Identificador único del núcleo de CPU.
+    Proceso *actual;          // Puntero al proceso que se está ejecutando actualmente en esta CPU. NULL si está libre
 } CPU;
 
 // ==========================
@@ -57,7 +58,7 @@ Proceso* desencolar(Proceso **cola) {
     return p;
 }
 
-// Ver si alguna CPU est� ocupada
+// Ver si alguna CPU está ocupada
 bool hayProcesosEnCPU(int numCPUs) {
     for (int i = 0; i < numCPUs; i++) {
         if (cpus[i].actual != NULL) return true;
@@ -137,7 +138,7 @@ void inicializarCPUs() {
 }
 
 // ==========================
-// Simulaci�n
+// Simulación
 // ==========================
 void simularSchedule() {
     int pulso = 0;
@@ -195,7 +196,7 @@ void simularSchedule() {
         terminados++;
         tmp = tmp->sig;
     }
-    printf("Simulaci�n terminada.\n");
+    printf("Simulación terminada.\n");
     printf("Procesos terminados: %d\n", terminados);
 }
 
